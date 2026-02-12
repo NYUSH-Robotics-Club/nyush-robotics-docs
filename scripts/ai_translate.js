@@ -7,7 +7,7 @@ require('dotenv').config();
 // Configuration
 const OPENAI_API_KEY = process.env.LLM_API_KEY;
 const OPENAI_BASE_URL = process.env.LLM_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1';
-const OPENAI_MODEL = process.env.LLM_MODEL || 'qwen-plus';
+const OPENAI_MODEL = process.env.LLM_MODEL || 'qwen-max';
 
 if (!OPENAI_API_KEY) {
   console.error('Error: LLM_API_KEY environment variable is required.');
