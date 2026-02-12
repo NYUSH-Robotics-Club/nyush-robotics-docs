@@ -1,0 +1,27 @@
+{
+  "name": "nyush-robotics-docs",
+  "version": "1.0.0",
+  "description": "Technical documentation for NYU Shanghai Robotics Club",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NYUSH-Robotics-Club/nyush-robotics-docs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NYUSH-Robotics-Club/nyush-robotics-docs/issues"
+  },
+  "homepage": "https://github.com/NYUSH-Robotics-Club/nyush-robotics-docs#readme",
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.28"
+  }
+}
