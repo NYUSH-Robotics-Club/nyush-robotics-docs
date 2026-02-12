@@ -7,8 +7,8 @@ ai:
   canonical: home
 
 hero:
-  name: "NYUSH Robotics Docs"
-  text: "Technical Documentation"
+  name: "NYUSH Robotics Club Docs"
+  text: ""
   tagline: "NYU Shanghai Robotics Club Technical Documentation"
   actions:
     - theme: brand

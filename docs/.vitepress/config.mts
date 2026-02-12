@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  appearance: 'dark',
   title: "NYUSH Robotics",
   description: "Technical documentation for NYU Shanghai Robotics Club",
 

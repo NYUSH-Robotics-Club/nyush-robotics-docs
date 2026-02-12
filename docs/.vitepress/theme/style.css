@@ -1,0 +1,173 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Brand Colors - Cyber Blue/Cyan */
+  --vp-c-brand-1: #00bcd4; /* Darker cyan for light mode readability */
+  --vp-c-brand-2: #0097a7;
+  --vp-c-brand-3: #00838f;
+  
+  --vp-c-brand-soft: rgba(0, 188, 212, 0.1);
+  
+  /* Font Families */
+  --vp-font-family-mono: 'JetBrains Mono', monospace;
+  
+  /* Light Mode Background */
+  --vp-c-bg: #f8fafc;
+  --vp-c-bg-alt: #f1f5f9;
+  
+  /* Hero section special effects - Light Mode */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #00bcd4 30%, #7c3aed);
+  
+  --vp-home-hero-image-filter: drop-shadow(0 0 40px rgba(0, 188, 212, 0.3));
+}
+
+.dark {
+  /* Dark Mode Backgrounds - Deep Space / Navy */
+  --vp-c-bg: #0b0e14;
+  --vp-c-bg-alt: #131720;
+  --vp-c-bg-soft: #1a1f2b;
+  
+  /* Text adjustments */
+  --vp-c-text-1: #e2e8f0;
+  --vp-c-text-2: #94a3b8;
+  
+  /* Borders - glowing effect */
+  --vp-c-border: #1e293b;
+  --vp-c-divider: #1e293b;
+  
+  /* Brand Colors - Neon for Dark Mode */
+  --vp-c-brand-1: #00f3ff;
+  --vp-c-brand-2: #22d3ee;
+  
+  /* Hero section special effects */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #00f3ff 30%, #a855f7);
+  
+  --vp-home-hero-image-filter: drop-shadow(0 0 40px rgba(0, 243, 255, 0.5));
+}
+
+/* Background Pattern - Light Mode */
+body {
+  background-color: var(--vp-c-bg);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 188, 212, 0.1) 0%, transparent 60%),
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  background-attachment: fixed;
+}
+
+/* Background Pattern - Dark Mode override */
+.dark body {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 243, 255, 0.15) 0%, transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Typography - Tech Style */
+h1, h2, h3, h4, h5, h6, .VPNavBarTitle {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Make body text cleaner */
+.vp-doc p, .vp-doc li {
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Custom UI Tweaks */
+
+/* Angular buttons for tech feel */
+.VPButton {
+  border-radius: 4px !important; 
+}
+
+/* Brand Button Styling */
+.VPButton.brand {
+  /* Light Mode Brand Button */
+  background-image: linear-gradient(90deg, #00bcd4, #0097a7);
+  color: #fff !important;
+  font-weight: 700;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.dark .VPButton.brand {
+  /* Dark Mode Brand Button */
+  background-image: linear-gradient(90deg, #00f3ff, #00bcd4);
+  color: #000 !important;
+}
+
+.VPButton.brand:hover {
+  transform: translateY(-1px);
+  /* Adjust shadow for light mode visibility */
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+}
+
+.dark .VPButton.brand:hover {
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+}
+
+/* Feature Cards */
+.VPFeature {
+  background-color: rgba(255, 255, 255, 0.5); /* Light Mode: slight transparency */
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s ease;
+}
+
+.dark .VPFeature {
+  background-color: rgba(19, 23, 32, 0.6);
+  border: 1px solid rgba(0, 243, 255, 0.1) !important;
+}
+
+.VPFeature:hover {
+  /* Light Mode Hover */
+  border-color: rgba(0, 188, 212, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(0, 188, 212, 0.1);
+  transform: translateY(-2px);
+}
+
+.dark .VPFeature:hover {
+  /* Dark Mode Hover */
+  border-color: rgba(0, 243, 255, 0.6) !important;
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+}
+
+/* Navbar transparency */
+.VPNavBar {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .VPNavBar {
+  background-color: rgba(11, 14, 20, 0.8) !important;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+/* Sidebar Styling */
+.VPSidebar {
+  background-color: #f8fafc; /* Light Mode sidebar */
+  border-right: 1px solid #e2e8f0;
+}
+
+.dark .VPSidebar {
+  background-color: #0b0e14 !important;
+  border-right: 1px solid #1e293b;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(0, 188, 212, 0.2); /* Light Mode selection */
+  color: inherit;
+}
+
+.dark ::selection {
+  background: rgba(0, 243, 255, 0.3);
+  color: #fff;
+}
