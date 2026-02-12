@@ -1,6 +1,11 @@
 ---
 layout: home
 
+title: 首页
+lang: zh
+ai:
+  canonical: home
+
 hero:
   name: "NYUSH Robotics Docs"
   text: "技术文档库"

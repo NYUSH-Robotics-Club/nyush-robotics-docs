@@ -1,3 +1,10 @@
+---
+title: 概览
+lang: zh
+ai:
+  canonical: guide-overview
+---
+
 # 概览
 
 这是 NYUSH Robotics Club 的技术文档概览页面。

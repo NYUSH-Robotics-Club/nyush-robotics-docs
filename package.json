@@ -21,6 +21,10 @@
   },
   "homepage": "https://github.com/NYUSH-Robotics-Club/nyush-robotics-docs#readme",
   "devDependencies": {
+    "dotenv": "^17.2.4",
+    "gray-matter": "^4.0.3",
+    "openai": "^6.21.0",
+    "simple-git": "^3.30.0",
     "vitepress": "^1.6.4",
     "vue": "^3.5.28"
   }
