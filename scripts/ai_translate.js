@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 const OpenAI = require('openai');
+const crypto = require('crypto');
 require('dotenv').config();
 
 // Configuration
@@ -19,7 +20,70 @@ const openai = new OpenAI({
   baseURL: OPENAI_BASE_URL,
 });
 
+/**
+ * Parses markdown content into blocks separated by H2 or H3 headers.
+ * Returns an array of block objects.
+ */
+function parseMarkdownBlocks(content) {
+  const lines = content.split('\n');
+  const blocks = [];
+  let currentBlock = { header: '__preamble__', lines: [] };
+  let inCodeBlock = false;
+
+  for (const line of lines) {
+    // Check code block
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+    }
+
+    // Check header (only if not in code block and level 2 or 3)
+    // You can adjust the regex to include H1 if needed, but H1 is usually managed via frontmatter/top-level.
+    // Let's include H1-H6 for completeness, but typically we care about H2/H3 for sectioning.
+    const headerMatch = line.match(/^(#{1,6})\s+(.*)/);
+    
+    // We split on H2 and H3 mainly, as H1 is title. H4+ might be too granular?
+    // User requested "H2/H3".
+    const isTargetHeader = headerMatch && (headerMatch[1].length === 2 || headerMatch[1].length === 3);
+
+    if (!inCodeBlock && isTargetHeader) {
+      // Save previous block if it has content
+      if (currentBlock.lines.length > 0) {
+        blocks.push({
+          header: currentBlock.header,
+          content: currentBlock.lines.join('\n')
+        });
+      }
+      // Start new block
+      // Keying by full header text is simple but fragile if duplicates exist.
+      // We will handle duplicates during processing.
+      currentBlock = {
+        header: headerMatch[0].trim(), // Store the full header line (e.g. "## Introduction")
+        lines: [line] // Include the header line in the block content? 
+                      // Yes, it's part of the translation unit usually, but typically we want to translate header separate from body?
+                      // If we include it, the LLM translates it. This is good.
+      };
+    } else {
+      currentBlock.lines.push(line);
+    }
+  }
+  // Push last block
+  if (currentBlock.lines.length > 0) {
+    blocks.push({
+      header: currentBlock.header,
+      content: currentBlock.lines.join('\n')
+    });
+  }
+  return blocks;
+}
+
+function calculateHash(content) {
+  return crypto.createHash('md5').update(content.trim()).digest('hex');
+}
+
 async function translateText(text, fromLang, toLang, context = '') {
+  // Short circuit empty text
+  if (!text || text.trim().length === 0) return text;
+
   const fromName = fromLang === 'zh' ? 'Chinese' : 'English';
   const toName = toLang === 'zh' ? 'Chinese' : 'English';
 
@@ -36,7 +100,8 @@ Rules:
 2. Do NOT translate code blocks, inline code, or URLs.
 3. Maintain a professional, technical tone.
 4. If the text is already in ${toName}, output it as is.
-5. ${context}`
+5. For internal links like \`[Label](/zh/path)\`, convert them to \`[Label](/en/path)\` (or vice versa).
+6. ${context}`
         },
         {
           role: "user",
@@ -75,6 +140,7 @@ async function processFile(filePath) {
   // Calculate paths
   const relativePath = path.relative(sourceDir, filePath);
   const targetPath = path.join(targetDir, relativePath);
+  const metaPath = targetPath + '.meta.json';
   
   // Read source
   const sourceContent = fs.readFileSync(filePath, 'utf8');
@@ -86,11 +152,59 @@ async function processFile(filePath) {
     return;
   }
 
-  // Skip if source file itself was AI generated (to prevent feedback loops, optional but safer)
-  // But we want to allow human editing of AI generated files to trigger back-translation?
-  // Let's assume if it's committed by a human (implied by this script running on push), we translate it.
-  
-  // Translate Frontmatter
+  // Read existing meta if available
+  let metaData = {};
+  if (fs.existsSync(metaPath)) {
+    try {
+      metaData = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    } catch (e) {
+      console.warn(`Failed to parse existing meta file: ${metaPath}`);
+    }
+  }
+
+  // Parse source blocks
+  const sourceBlocks = parseMarkdownBlocks(content);
+  const newMetaBlocks = {};
+  const translatedBlocks = [];
+
+  // Helper to get unique key for blocks (handle duplicate headers)
+  const headerCounts = {};
+  function getBlockKey(header) {
+    const count = (headerCounts[header] || 0) + 1;
+    headerCounts[header] = count;
+    return `${header}::${count}`;
+  }
+
+  console.log(`Found ${sourceBlocks.length} blocks in source.`);
+
+  for (const block of sourceBlocks) {
+    const blockKey = getBlockKey(block.header);
+    const currentHash = calculateHash(block.content);
+    
+    let translatedContent = '';
+    
+    // Check if block exists in meta and hash matches
+    if (metaData[blockKey] && metaData[blockKey].sourceHash === currentHash && metaData[blockKey].targetContent) {
+      // Reuse existing content
+      // console.log(`Skipping translation for unchanged block: ${block.header}`);
+      translatedContent = metaData[blockKey].targetContent;
+    } else {
+      // Translate
+      console.log(`Translating block: ${block.header.substring(0, 30)}...`);
+      translatedContent = await translateText(block.content, fromLang, toLang, 
+        block.header === '__preamble__' ? 'This is the preamble before headers.' : 'This is a section with a header.');
+    }
+
+    // Update meta
+    newMetaBlocks[blockKey] = {
+      sourceHash: currentHash,
+      targetContent: translatedContent
+    };
+    
+    translatedBlocks.push(translatedContent);
+  }
+
+  // Translate Frontmatter (Always check/update lightly, or we could hash it too? simpler to just re-translate for now as it's small)
   const newFrontmatter = { ...frontmatter };
   newFrontmatter.lang = toLang;
   
@@ -109,18 +223,21 @@ async function processFile(filePath) {
     source_commit: process.env.GITHUB_SHA || 'local'
   };
 
-  // Translate Content
-  const translatedContent = await translateText(content, fromLang, toLang, 'Translate the markdown body.');
-
   // Reconstruct file
-  const newFileContent = matter.stringify(translatedContent, newFrontmatter);
+  const fullTranslatedContent = translatedBlocks.join('\n');
+  const newFileContent = matter.stringify(fullTranslatedContent, newFrontmatter);
 
   // Ensure directory exists
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
   // Write file
   fs.writeFileSync(targetPath, newFileContent);
+  
+  // Write Sidecar Meta
+  fs.writeFileSync(metaPath, JSON.stringify(newMetaBlocks, null, 2));
+  
   console.log(`Generated: ${targetPath}`);
+  console.log(`Updated Meta: ${metaPath}`);
 }
 
 async function main() {
