@@ -11,7 +11,6 @@ export default defineConfig({
   
   locales: {
     root: {
-      label: 'Home',
       lang: 'zh'
     },
     zh: {
@@ -21,16 +20,27 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '首页', link: '/zh/' },
-          { text: '指南', link: '/zh/guide/overview' }
+          { text: 'Robomaster', link: '/zh/robomaster/' },
+          { text: 'VEX', link: '/zh/vex/' }
         ],
-        sidebar: [
-          {
-            text: '指南',
-            items: [
-              { text: '概览', link: '/zh/guide/overview' }
-            ]
-          }
-        ]
+        sidebar: {
+          '/zh/robomaster/': [
+            {
+              text: 'Robomaster',
+              items: [
+                { text: '概览', link: '/zh/robomaster/' }
+              ]
+            }
+          ],
+          '/zh/vex/': [
+            {
+              text: 'VEX',
+              items: [
+                { text: '概览', link: '/zh/vex/' }
+              ]
+            }
+          ]
+        }
       }
     },
     en: {
@@ -40,16 +50,27 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Home', link: '/en/' },
-          { text: 'Guide', link: '/en/guide/overview' }
+          { text: 'Robomaster', link: '/en/robomaster/' },
+          { text: 'VEX', link: '/en/vex/' }
         ],
-        sidebar: [
-          {
-            text: 'Guide',
-            items: [
-              { text: 'Overview', link: '/en/guide/overview' }
-            ]
-          }
-        ]
+        sidebar: {
+          '/en/robomaster/': [
+            {
+              text: 'Robomaster',
+              items: [
+                { text: 'Overview', link: '/en/robomaster/' }
+              ]
+            }
+          ],
+          '/en/vex/': [
+            {
+              text: 'VEX',
+              items: [
+                { text: 'Overview', link: '/en/vex/' }
+              ]
+            }
+          ]
+        }
       }
     }
   },

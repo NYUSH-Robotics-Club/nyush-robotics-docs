@@ -11,18 +11,15 @@ hero:
   text: ""
   tagline: "上海纽约大学机器人社技术文档"
   actions:
-    - theme: brand
-      text: "开始阅读"
-      link: /zh/guide/overview
     - theme: alt
       text: "GitHub"
       link: https://github.com/NYUSH-Robotics-Club/nyush-robotics-docs
 
 features:
-  - title: 统一规范
-    details: 标准化的 Markdown 格式与目录结构
-  - title: 双语支持
-    details: 中英文对照（目前以中文为主）
-  - title: 快速上手
-    details: 基于 VitePress 的现代化文档体验
+  - title: Robomaster
+    details: 队伍资料、环境配置和项目文档。
+    link: /zh/robomaster/
+  - title: VEX
+    details: 搭建说明、编程资料和赛事文档。
+    link: /zh/vex/
 ---
