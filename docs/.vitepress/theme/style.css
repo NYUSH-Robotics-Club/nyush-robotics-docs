@@ -228,3 +228,19 @@ h1, h2, h3, h4, h5, h6, .VPNavBarTitle {
 .dark .lang-switch-secondary {
   color: #e2e8f0;
 }
+
+/* Mermaid */
+.vp-doc pre.mermaid {
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc pre.mermaid svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}

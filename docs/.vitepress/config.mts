@@ -4,6 +4,22 @@ export default defineConfig({
   appearance: 'dark',
   title: "NYUSH Robotics",
   description: "Technical documentation for NYU Shanghai Robotics Club",
+  markdown: {
+    config: (md) => {
+      const defaultFence = md.renderer.rules.fence?.bind(md.renderer.rules)
+      md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+        const token = tokens[idx]
+        const info = token.info.trim()
+        if (info === 'mermaid') {
+          return `<pre class="mermaid">${md.utils.escapeHtml(token.content)}</pre>`
+        }
+        if (defaultFence) {
+          return defaultFence(tokens, idx, options, env, self)
+        }
+        return self.renderToken(tokens, idx, options)
+      }
+    }
+  },
 
   sitemap: {
     hostname: 'https://docs.nyushrobotics.club'
@@ -26,17 +42,39 @@ export default defineConfig({
         sidebar: {
           '/zh/robomaster/': [
             {
-              text: 'Robomaster',
+              text: '学习路径',
               items: [
-                { text: '概览', link: '/zh/robomaster/' }
+                { text: '00 前言', link: '/zh/robomaster/00-preface' },
+                { text: '01 入门导读', link: '/zh/robomaster/01-start-here' },
+                { text: '02 工具与环境', link: '/zh/robomaster/02-tools-and-env' },
+                { text: '03 第一次编译与烧录', link: '/zh/robomaster/03-first-build-flash' },
+                { text: '04 硬件与安全基础', link: '/zh/robomaster/04-hardware-safety' },
+                { text: '05 CAN 通信入门', link: '/zh/robomaster/05-can-intro' },
+                { text: '06 架构与任务流', link: '/zh/robomaster/07-app-architecture' },
+                { text: '07 Application 层代码结构', link: '/zh/robomaster/09-application-layer-code-structure' },
+                { text: '08 调试与调参工作流', link: '/zh/robomaster/08-debug-workflow' },
+                { text: '09 裁判系统与 UI 入门', link: '/zh/robomaster/12-referee-system-and-ui' },
+              ]
+            },
+            {
+              text: '参考附录',
+              items: [
+                { text: '赛季与规则', link: '/zh/robomaster/season-rules' },
+                { text: '硬件概览', link: '/zh/robomaster/hardware-overview' },
+                { text: '硬件手册 PDF', link: '/zh/robomaster/hardware-manuals' },
+                { text: 'Git 与开发环境', link: '/zh/robomaster/git-env' }
               ]
             }
           ],
           '/zh/vex/': [
             {
-              text: 'VEX',
+              text: 'VEXU',
               items: [
-                { text: '概览', link: '/zh/vex/' }
+                { text: '总览', link: '/zh/vex/' },
+                { text: '01 评审总览', link: '/zh/vex/01-vexu-judging-overview' },
+                { text: '02 Notebook 要求', link: '/zh/vex/02-engineering-notebook-requirements' },
+                { text: '03 Interview 要求', link: '/zh/vex/03-team-interview-requirements' },
+                { text: '04 提交与赛前清单', link: '/zh/vex/04-submission-and-prep-checklist' }
               ]
             }
           ]
@@ -56,17 +94,39 @@ export default defineConfig({
         sidebar: {
           '/en/robomaster/': [
             {
-              text: 'Robomaster',
+              text: 'Learning Path',
               items: [
-                { text: 'Overview', link: '/en/robomaster/' }
+                { text: '00 Preface', link: '/en/robomaster/00-preface' },
+                { text: '01 Getting Started', link: '/en/robomaster/01-start-here' },
+                { text: '02 Tools and Environment', link: '/en/robomaster/02-tools-and-env' },
+                { text: '03 First Build and Flash', link: '/en/robomaster/03-first-build-flash' },
+                { text: '04 Hardware and Safety Basics', link: '/en/robomaster/04-hardware-safety' },
+                { text: '05 CAN Basics', link: '/en/robomaster/05-can-intro' },
+                { text: '06 Architecture and Task Flow', link: '/en/robomaster/07-app-architecture' },
+                { text: '07 Application Layer Code Structure', link: '/en/robomaster/09-application-layer-code-structure' },
+                { text: '08 Debug and Tuning Workflow', link: '/en/robomaster/08-debug-workflow' },
+                { text: '09 Referee System and UI Basics', link: '/en/robomaster/12-referee-system-and-ui' },
+              ]
+            },
+            {
+              text: 'Reference',
+              items: [
+                { text: 'Season and Rules', link: '/en/robomaster/season-rules' },
+                { text: 'Hardware Overview', link: '/en/robomaster/hardware-overview' },
+                { text: 'Hardware Manuals', link: '/en/robomaster/hardware-manuals' },
+                { text: 'Git and Environment', link: '/en/robomaster/git-env' }
               ]
             }
           ],
           '/en/vex/': [
             {
-              text: 'VEX',
+              text: 'VEXU',
               items: [
-                { text: 'Overview', link: '/en/vex/' }
+                { text: 'Overview', link: '/en/vex/' },
+                { text: '01 Judging Overview', link: '/en/vex/01-vexu-judging-overview' },
+                { text: '02 Notebook Requirements', link: '/en/vex/02-engineering-notebook-requirements' },
+                { text: '03 Interview Requirements', link: '/en/vex/03-team-interview-requirements' },
+                { text: '04 Submission Checklist', link: '/en/vex/04-submission-and-prep-checklist' }
               ]
             }
           ]
