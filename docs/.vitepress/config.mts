@@ -45,15 +45,14 @@ export default defineConfig({
               text: '学习路径',
               items: [
                 { text: '00 前言', link: '/zh/robomaster/00-preface' },
-                { text: '01 入门导读', link: '/zh/robomaster/01-start-here' },
-                { text: '02 工具与环境', link: '/zh/robomaster/02-tools-and-env' },
-                { text: '03 第一次编译与烧录', link: '/zh/robomaster/03-first-build-flash' },
-                { text: '04 硬件与安全基础', link: '/zh/robomaster/04-hardware-safety' },
-                { text: '05 CAN 通信入门', link: '/zh/robomaster/05-can-intro' },
-                { text: '06 架构与任务流', link: '/zh/robomaster/07-app-architecture' },
-                { text: '07 Application 层代码结构', link: '/zh/robomaster/09-application-layer-code-structure' },
-                { text: '08 调试与调参工作流', link: '/zh/robomaster/08-debug-workflow' },
-                { text: '09 裁判系统与 UI 入门', link: '/zh/robomaster/12-referee-system-and-ui' },
+                { text: '01 工具与环境', link: '/zh/robomaster/01-tools-and-env' },
+                { text: '02 第一次编译与烧录', link: '/zh/robomaster/02-first-build-flash' },
+                { text: '03 硬件与安全基础', link: '/zh/robomaster/03-hardware-safety' },
+                { text: '04 CAN 通信入门', link: '/zh/robomaster/04-can-intro' },
+                { text: '05 架构与任务流', link: '/zh/robomaster/05-app-architecture' },
+                { text: '06 Application 层代码结构', link: '/zh/robomaster/06-application-layer-code-structure' },
+                { text: '07 调试与调参工作流', link: '/zh/robomaster/07-debug-workflow' },
+                { text: '08 裁判系统与 UI 入门', link: '/zh/robomaster/08-referee-system-and-ui' },
               ]
             },
             {
